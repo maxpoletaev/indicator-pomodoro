@@ -1,0 +1,29 @@
+<schemalist>
+  <schema id="apps.indicator-pomodoro" path="/apps/indicator-pomodoro/" gettext-domain="indicator-pomodoro">
+
+    <key name="pomodoro-duration" type="d">
+      <default>1500</default>
+      <summary>Pomodoro duration</summary>
+      <description>Time in seconds you are supposed to be working.</description>
+    </key>
+
+    <key name="short-break-duration" type="d">
+      <default>300</default>
+      <summary>Short pause duration</summary>
+      <description>Time in seconds you are supposed to take a short break.</description>
+    </key>
+
+    <key name="long-break-duration" type="d">
+      <default>900</default>
+      <summary>Long pause duration</summary>
+      <description>Time in seconds you are supposed to take a longer break.</description>
+    </key>
+
+    <key name="long-break-interval" type="d">
+      <default>4</default>
+      <summary>Long pause interval</summary>
+      <description>Number of pomodoros to a long break.</description>
+    </key>
+
+  </schema>
+</schemalist>
