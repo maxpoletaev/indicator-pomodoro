@@ -1,51 +1,65 @@
+using AppIndicator;
+
 namespace Pomodoro {
-
-    class IndicatorMenu : Gtk.Menu {
-        public Gtk.MenuItem item_start;
-        public Gtk.MenuItem item_stop;
-
-        private void create_menu () {
-            this.item_start = new Gtk.MenuItem.with_label ("_Start");
-            this.append (this.item_start);
-            this.item_start.show ();
-
-            this.item_stop = new Gtk.MenuItem.with_label ("_Stop");
-            this.append (this.item_stop);
-
-            var item_quit = new Gtk.MenuItem.with_label ("_Exit");
-            item_quit.activate.connect (Gtk.main_quit);
-        }
+    struct PomodoroMenu {
+        public Gtk.MenuItem start;
+        public Gtk.MenuItem stop;
+        public Gtk.MenuItem exit;
     }
 
-    class PomodoroIndicator : AppIndicator.Indicator {
-        public signal void start ();
-        public signal void stop ();
+    class PomodoroIndicator : Indicator {
+        public PomodoroMenu menu;
 
-        public void set_time () {
+        public PomodoroIndicator () {
+            Object (
+                id: "Pomodoro Indicator",
+                category: "ApplicationStatus",
+                icon_name: get_icon_name ("start"),
+                icon_theme_path: get_theme_path ()
+            );
 
+            set_status (IndicatorStatus.ACTIVE);
+            create_menu ();
         }
 
-        public void clear_time () {
-
+        public void set_value (double seconds, double percent) {
+            icon_name = percent_to_icon (percent);
         }
 
-        private void create_menu () {
-            var menu = new IndicatorMenu ();
+        public void reset () {
+            icon_name = get_icon_name ("stop");
+            label = null;
+        }
 
-            menu.item_start.activate.connect(() => {
-                menu.item_start.hide ();
-                menu.item_stop.show ();
-                this.start ();
+        public void create_menu () {
+            var gtk_menu = new Gtk.Menu ();
+
+            menu = PomodoroMenu () {
+                start = new Gtk.MenuItem.with_label ("Start"),
+                stop = new Gtk.MenuItem.with_label ("Stop"),
+                exit =  new Gtk.MenuItem.with_label ("Exit")
+            };
+
+            menu.exit.activate.connect (() => {
+                Gtk.main_quit ();
             });
 
-            menu.item_start.activate.connect(() => {
-                menu.item_start.show ();
-                menu.item_stop.hide ();
-                this.stop ();
-            });
+            gtk_menu.append (menu.start);
+            gtk_menu.append (menu.stop);
+            gtk_menu.append (menu.exit);
 
-            this.set_menu (menu);
+            gtk_menu.show_all ();
+            set_menu (gtk_menu);
+        }
+
+        private string percent_to_icon (double percent) {
+            var icon_id = Math.round(36 / 100.0 * percent).to_string ();
+
+            if (icon_id.length == 1) {
+                icon_id = "0" + icon_id;
+            }
+
+            return get_icon_name(icon_id);
         }
     }
-
 }
