@@ -1,6 +1,7 @@
 all:
 	valac \
-		src/PomodoroTimer.vala src/PomodoroIndicator.vala src/SettingsWindow.vala src/Pomodoro.vala \
+		lib/basic-timer.vala \
+		src/pomodoro-timer.vala src/pomodoro-indicator.vala src/pomodoro.vala \
 		--pkg=appindicator3-0.1 --pkg=libnotify --pkg=glib-2.0 --pkg=gtk+-3.0 --pkg gio-2.0 \
 		--output=bin/indicator-pomodoro \
 		--target-glib 2.32 \

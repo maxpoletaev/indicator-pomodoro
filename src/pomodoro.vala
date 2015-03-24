@@ -4,8 +4,7 @@ namespace Pomodoro {
 
     class Pomodoro : Object {
         public PomodoroIndicator indicator;
-        public PomodoroTimer timer = null;
-        private int iteration = 0;
+        public PomodoroTimer timer;
 
         public Pomodoro () {
             init_settings ();
@@ -13,49 +12,33 @@ namespace Pomodoro {
 
         public void init_objects () {
             indicator = new PomodoroIndicator ();
+            timer = new PomodoroTimer (indicator);
         }
 
         public void init_signals () {
-            indicator.menu.exit.activate.connect (Gtk.main_quit);
             indicator.menu.start.activate.connect (start_timer);
             indicator.menu.stop.activate.connect (stop_timer);
+            indicator.menu.exit.activate.connect (quit);
             indicator.menu.stop.hide ();
         }
 
         public void start_timer () {
-            timer = timer_factory (indicator, "pomodoro");
-            timer.start ();
+            indicator.menu.start.hide ();
+            indicator.menu.stop.show ();
+            timer.start_iteration ();
         }
 
         public void stop_timer () {
-            timer.stop ();
-        }
-    }
-
-    private PomodoroTimer timer_factory (PomodoroIndicator indicator, string type) {
-        var duration = settings.get_double (@"$type-duration");
-        var timer = new PomodoroTimer (duration);
-
-        timer.start_event.connect (() => {
-            indicator.menu.start.hide ();
-            indicator.menu.stop.show ();
-
-            notify_send ("Timer started");
-        });
-
-        timer.stop_event.connect (() => {
             indicator.menu.start.show ();
             indicator.menu.stop.hide ();
+            timer.stop ();
             indicator.reset ();
+        }
 
-            notify_send ("Timer stopped");
-        });
-
-        timer.tick_event.connect (() => {
-            indicator.set_value (timer.remaining, timer.percent);
-        });
-
-        return timer;
+        public void quit () {
+            timer.stop ();
+            Gtk.main_quit ();
+        }
     }
 
     private void notify_send (string message) {
