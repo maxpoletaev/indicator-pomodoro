@@ -25,5 +25,11 @@
       <description>Number of pomodoros to a long break.</description>
     </key>
 
+    <key name="show-remaining-time" type="b">
+      <default>false</default>
+      <summary>Show remaining time</summary>
+      <description></description>
+    </key>
+
   </schema>
 </schemalist>

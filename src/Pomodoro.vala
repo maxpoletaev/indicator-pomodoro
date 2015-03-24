@@ -39,19 +39,20 @@ namespace Pomodoro {
         timer.start_event.connect (() => {
             indicator.menu.start.hide ();
             indicator.menu.stop.show ();
+
+            notify_send ("Timer started");
         });
 
         timer.stop_event.connect (() => {
             indicator.menu.start.show ();
             indicator.menu.stop.hide ();
+            indicator.reset ();
+
+            notify_send ("Timer stopped");
         });
 
         timer.tick_event.connect (() => {
             indicator.set_value (timer.remaining, timer.percent);
-        });
-
-        timer.stop_event.connect (() => {
-            indicator.reset ();
         });
 
         return timer;

@@ -1,10 +1,26 @@
 using AppIndicator;
 
 namespace Pomodoro {
-    struct PomodoroMenu {
+    class PomodoroMenu : Gtk.Menu {
         public Gtk.MenuItem start;
         public Gtk.MenuItem stop;
         public Gtk.MenuItem exit;
+
+        public PomodoroMenu () {
+            Object ();
+            setup_items ();
+            show_all ();
+        }
+
+        private void setup_items () {
+            start = new Gtk.MenuItem.with_label ("Start");
+            stop = new Gtk.MenuItem.with_label ("Stop");
+            exit =  new Gtk.MenuItem.with_label ("Exit");
+
+            append (start);
+            append (stop);
+            append (exit);
+        }
     }
 
     class PomodoroIndicator : Indicator {
@@ -19,11 +35,17 @@ namespace Pomodoro {
             );
 
             set_status (IndicatorStatus.ACTIVE);
-            create_menu ();
+            setup_menu ();
         }
 
-        public void set_value (double seconds, double percent) {
+        public void set_value (double remaining, double percent) {
             icon_name = percent_to_icon (percent);
+
+            if (settings.get_boolean ("show-remaining-time")) {
+                label = seconds_to_time (remaining);
+            } else {
+                label = null;
+            }
         }
 
         public void reset () {
@@ -31,35 +53,34 @@ namespace Pomodoro {
             label = null;
         }
 
-        public void create_menu () {
-            var gtk_menu = new Gtk.Menu ();
-
-            menu = PomodoroMenu () {
-                start = new Gtk.MenuItem.with_label ("Start"),
-                stop = new Gtk.MenuItem.with_label ("Stop"),
-                exit =  new Gtk.MenuItem.with_label ("Exit")
-            };
-
-            menu.exit.activate.connect (() => {
-                Gtk.main_quit ();
-            });
-
-            gtk_menu.append (menu.start);
-            gtk_menu.append (menu.stop);
-            gtk_menu.append (menu.exit);
-
-            gtk_menu.show_all ();
-            set_menu (gtk_menu);
+        public void setup_menu () {
+            menu = new PomodoroMenu ();
+            set_menu (menu);
         }
 
         private string percent_to_icon (double percent) {
-            var icon_id = Math.round(36 / 100.0 * percent).to_string ();
+            var icon_id = Math.round (36 / 100.0 * percent).to_string ();
 
-            if (icon_id.length == 1) {
+            if (icon_id.length == 1)
                 icon_id = "0" + icon_id;
-            }
 
-            return get_icon_name(icon_id);
+            return get_icon_name (icon_id);
+        }
+
+        private string seconds_to_time (double time) {
+            var minutes = (int) (time / 60);
+            var seconds = (int) (time % 60);
+
+            var str_minutes = minutes.to_string ();
+            var str_seconds = seconds.to_string ();
+
+            if (str_minutes.length == 1)
+                str_minutes = "0" + str_minutes;
+
+            if (str_seconds.length == 1)
+                str_seconds = "0" + str_seconds;
+
+            return @"$str_minutes:$str_seconds";
         }
     }
 }
