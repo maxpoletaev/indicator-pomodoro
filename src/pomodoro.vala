@@ -6,10 +6,6 @@ namespace Pomodoro {
         public PomodoroIndicator indicator;
         public PomodoroTimer timer;
 
-        public Pomodoro () {
-            init_settings ();
-        }
-
         public void init_objects () {
             indicator = new PomodoroIndicator ();
             timer = new PomodoroTimer (indicator);
@@ -65,6 +61,7 @@ namespace Pomodoro {
     static int main (string[] args) {
         Notify.init (APP_NAME);
         Gtk.init (ref args);
+        init_settings ();
 
         var pomodoro = new Pomodoro ();
         pomodoro.init_objects ();
