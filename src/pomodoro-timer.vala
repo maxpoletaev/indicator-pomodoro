@@ -63,8 +63,10 @@ namespace Pomodoro {
         }
 
         public void stop () {
-            active = false;
-            timer.stop ();
+            if (timer != null) {
+                active = false;
+                timer.stop ();
+            }
         }
     }
 
