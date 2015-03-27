@@ -12,23 +12,31 @@ namespace Pomodoro {
         }
 
         public void init_signals () {
-            indicator.menu.start.activate.connect (start_timer);
-            indicator.menu.stop.activate.connect (stop_timer);
-            indicator.menu.exit.activate.connect (quit);
-            indicator.menu.stop.hide ();
+            indicator.menu.start_item.activate.connect (start_timer);
+            indicator.menu.stop_item.activate.connect (stop_timer);
+            indicator.menu.quit_item.activate.connect (quit);
+
+            indicator.menu.show_time_item.toggled.connect (toggle_remaining_time);
+
+            indicator.menu.stop_item.hide ();
         }
 
         public void start_timer () {
-            indicator.menu.start.hide ();
-            indicator.menu.stop.show ();
+            indicator.menu.start_item.hide ();
+            indicator.menu.stop_item.show ();
             timer.start_iteration ();
         }
 
         public void stop_timer () {
-            indicator.menu.start.show ();
-            indicator.menu.stop.hide ();
+            indicator.menu.start_item.show ();
+            indicator.menu.stop_item.hide ();
             timer.stop ();
             indicator.reset ();
+        }
+
+        public void toggle_remaining_time () {
+            indicator.menu.show_time_item.active = !settings.get_boolean ("show-remaining-time");
+            settings.set_boolean ("show-remaining-time", indicator.menu.show_time_item.active);
         }
 
         public void quit () {

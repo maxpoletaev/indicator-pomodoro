@@ -2,9 +2,12 @@ using AppIndicator;
 
 namespace Pomodoro {
     class PomodoroMenu : Gtk.Menu {
-        public Gtk.MenuItem start;
-        public Gtk.MenuItem stop;
-        public Gtk.MenuItem exit;
+        public Gtk.MenuItem start_item;
+        public Gtk.MenuItem stop_item;
+        public Gtk.MenuItem quit_item;
+
+        public Gtk.CheckMenuItem show_time_item;
+        public Gtk.CheckMenuItem play_sounds_item;
 
         public PomodoroMenu () {
             Object ();
@@ -13,13 +16,27 @@ namespace Pomodoro {
         }
 
         private void setup_items () {
-            start = new Gtk.MenuItem.with_label ("Start");
-            stop = new Gtk.MenuItem.with_label ("Stop");
-            exit =  new Gtk.MenuItem.with_label ("Exit");
+            start_item = new Gtk.MenuItem.with_label ("Start");
+            stop_item = new Gtk.MenuItem.with_label ("Stop");
+            quit_item =  new Gtk.MenuItem.with_label ("Quit");
 
-            append (start);
-            append (stop);
-            append (exit);
+            show_time_item = new Gtk.CheckMenuItem.with_label ("Show time");
+            show_time_item.set_active (settings.get_boolean ("show-remaining-time"));
+
+            play_sounds_item = new Gtk.CheckMenuItem.with_label ("Play sounds");
+            play_sounds_item.set_active (true); // TODO
+
+            append (start_item);
+            append (stop_item);
+
+            append (new Gtk.SeparatorMenuItem ());
+
+            append (show_time_item);
+            append (play_sounds_item);
+
+            append (new Gtk.SeparatorMenuItem ());
+
+            append (quit_item);
         }
     }
 
