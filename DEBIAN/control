@@ -1,0 +1,8 @@
+Package: indicator-pomodoro
+Version: 1.0-1
+Section: misc
+Priority: optional
+Architecture: amd64
+Depends: dconf, libappindicator
+Maintainer: Maxim Poletaev <zenwalker2@gmail.com>
+Description: Timer for Pomodoro technique
