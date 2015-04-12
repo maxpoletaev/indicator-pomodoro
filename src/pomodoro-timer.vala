@@ -65,6 +65,7 @@ namespace Pomodoro {
         public void stop () {
             if (timer != null) {
                 active = false;
+                iteration = 0;
                 timer.stop ();
             }
         }
