@@ -62,6 +62,11 @@ namespace Pomodoro {
             notify_send ((is_long_break) ? "Long break started" : "Break started");
         }
 
+        public void refresh_value () {
+            if (active)
+                indicator.set_value (timer.remaining, timer.percent);
+        }
+
         public void stop () {
             if (timer != null) {
                 active = false;

@@ -50,6 +50,7 @@ namespace Pomodoro {
         public void toggle_remaining_time () {
             indicator.menu.show_time_item.active = !settings.get_boolean ("show-remaining-time");
             settings.set_boolean ("show-remaining-time", indicator.menu.show_time_item.active);
+            timer.refresh_value ();
         }
 
         public void quit () {
