@@ -23,7 +23,11 @@ namespace Pomodoro {
         }
 
         public void init_hotkeys () {
-            keybinding.bind("<Ctrl><Alt>P", toggle_timer);
+            var toggle_timer_shortcut = settings.get_string("toggle-timer-shortcut");
+
+            if (toggle_timer_shortcut != "") {
+                keybinding.bind(toggle_timer_shortcut, toggle_timer);
+            }
         }
 
         public void start_timer () {

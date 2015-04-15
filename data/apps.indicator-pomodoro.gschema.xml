@@ -31,5 +31,11 @@
       <description></description>
     </key>
 
+    <key name="toggle-timer-shortcut" type="s">
+      <default>'&lt;Ctrl&gt;&lt;Alt&gt;P'</default>
+      <summary>Shortcut for start/stop timer</summary>
+      <description></description>
+    </key>
+
   </schema>
 </schemalist>
