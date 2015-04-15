@@ -3,12 +3,14 @@ namespace Pomodoro {
     private Settings settings;
 
     class Pomodoro : Object {
+        public KeybindingManager keybinding;
         public PomodoroIndicator indicator;
         public PomodoroTimer timer;
 
         public void init_objects () {
             indicator = new PomodoroIndicator ();
             timer = new PomodoroTimer (indicator);
+            keybinding = new KeybindingManager ();
         }
 
         public void init_signals () {
@@ -17,8 +19,11 @@ namespace Pomodoro {
             indicator.menu.quit_item.activate.connect (quit);
 
             indicator.menu.show_time_item.toggled.connect (toggle_remaining_time);
-
             indicator.menu.stop_item.hide ();
+        }
+
+        public void init_hotkeys () {
+            keybinding.bind("<Ctrl><Alt>P", toggle_timer);
         }
 
         public void start_timer () {
@@ -32,6 +37,14 @@ namespace Pomodoro {
             indicator.menu.stop_item.hide ();
             timer.stop ();
             indicator.reset ();
+        }
+
+        public void toggle_timer () {
+            if (timer.is_active ()) {
+                stop_timer ();
+            } else {
+                start_timer ();
+            }
         }
 
         public void toggle_remaining_time () {
@@ -74,6 +87,7 @@ namespace Pomodoro {
         var pomodoro = new Pomodoro ();
         pomodoro.init_objects ();
         pomodoro.init_signals ();
+        pomodoro.init_hotkeys ();
 
         Gtk.main ();
         return 0;

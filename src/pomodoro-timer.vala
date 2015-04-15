@@ -69,6 +69,10 @@ namespace Pomodoro {
                 timer.stop ();
             }
         }
+
+        public bool is_active () {
+            return active;
+        }
     }
 
 }
